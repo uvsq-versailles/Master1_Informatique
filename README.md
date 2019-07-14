@@ -14,7 +14,6 @@ Contenus des COURS/TD/PROJET/EXAM en Master 1
 + INF115 (Cryptographie) : Louis Goubin
 + INF201 (Programmation, GL et Preuve) : Stephane Lopes
 + INF202 (TER) : Stephane Lopes
-+ INF203 (Anglais) 
 + INF211 (Ranking) : Jean-Michel Fourneau
 + INF212 (Simulation) : Franck Quessette
 + INF213 (Tuning de Bases de Données) : Laurent Yeh
