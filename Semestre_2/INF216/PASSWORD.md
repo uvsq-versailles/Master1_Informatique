@@ -1,0 +1,1 @@
+Le mot de passe pour ouvrir les documents PDF en réseau est : IRSPRINT

@@ -1,0 +1,20 @@
+Exo1
+En alea, on génére la meme chose a chaque exec avec random();
+Sradom sert a initialiser la seed
+getpid retorun l'id du processus appelant
+
+TD2
+
+expo et poisson simule l'évènement d'arrivé et de sortie. 
+lambda : entre	u : sortie
+lambda < u
+charge p = lambda/Mu
+
+lambda	Mu	charge(lambda/Mu)	NMoyen (on prend le dernier Nmoyen)
+2		10	0,2					0.183688				
+3		10	0,3					0.272555
+5		10	0,5					0.387177
+7		10	0,7					0.508042
+9		10	0,9					0.702734
+
+Plus la charge augmente, plus le nombre moyen de client augmente

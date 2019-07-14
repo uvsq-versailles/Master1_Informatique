@@ -1,0 +1,1 @@
+Serveur Discord Master 1 Informatique Semestre 2 : https://discord.gg/ErtrVK

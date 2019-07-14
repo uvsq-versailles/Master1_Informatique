@@ -1,0 +1,15 @@
+{
+  "name": "reflector",
+  "version": "0.0.1",
+  "description": "An example Node application with Nunjucks templates",
+  "scripts": {
+    "start": "node reflector.js"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "cookie-parser": "^1.4.4"
+  },
+  "engines": {
+    "node": "8.x"
+  }
+}

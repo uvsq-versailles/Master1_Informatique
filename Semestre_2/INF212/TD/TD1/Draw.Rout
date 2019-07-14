@@ -1,0 +1,33 @@
+
+R version 3.3.3 (2017-03-06) -- "Another Canoe"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R est un logiciel libre livré sans AUCUNE GARANTIE.
+Vous pouvez le redistribuer sous certaines conditions.
+Tapez 'license()' ou 'licence()' pour plus de détails.
+
+R est un projet collaboratif avec de nombreux contributeurs.
+Tapez 'contributors()' pour plus d'information et
+'citation()' pour la façon de le citer dans les publications.
+
+Tapez 'demo()' pour des démonstrations, 'help()' pour l'aide
+en ligne ou 'help.start()' pour obtenir l'aide au format HTML.
+Tapez 'q()' pour quitter R.
+
+[Sauvegarde de la session précédente restaurée]
+
+> # pour executer le code : R CMD BATCH "Draw.R"
+> 
+> modelname = "Test.data"
+> data = read.table(modelname)
+> attach(data);
+> 
+> iteration = V1
+> pertincence = V2
+> 
+> plot(temps,Moyenne,type="l",xlab="ite",ylab="perti",col="red")
+> 
+> proc.time()
+utilisateur     système      écoulé 
+      1.721       0.094       1.829 

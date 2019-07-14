@@ -1,0 +1,44 @@
+/*@keyframes rainbow {
+    0% { color: red; background-color: green }
+   14% { color: orange; background-color: blue }
+   28% { color: yellow; background-color: indigo }
+   42% { color: green; background-color: violet }
+   56% { color: blue; background-color: red }
+   70% { color: indigo; background-color: orange }
+   84% { color: violet; background-color: yellow }
+  100% { color: red; background-color: green }
+}*/
+
+body {
+  animation: rainbow 8s infinite;
+}
+h1 { 
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 20vh;
+  margin-top: 30vh;
+}
+h2 {
+  text-align: center;
+  font-family: sans-serif;
+  margin-top: 30vh;
+  border-style: outset;
+}
+table.diplomes {
+   padding: 20px 1em 0 2em;
+}
+#personal {
+  color: #0000FF;
+}
+#rest {
+  color: #FF0000;
+}
+#image {
+  position: absolute;
+  left: 900px;
+  top: 330px;
+}
+
+a.navigation:hover{
+ background-color: gold; 
+}

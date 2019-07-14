@@ -1,0 +1,6 @@
+#Pour lancer : ./script		avant : chmod +x scriptCST
+
+gcc Exo1_genalea.c -o exo1
+./exo1
+
+R CMD BATCH Draw.R

@@ -1,0 +1,18 @@
+<!Doctype html>
+<html>
+    <head>
+        <meta name="description" content="A cool thing made with Glitch">
+        <meta charset="utf-8">
+    </head>
+    <body>
+      <table>
+      <tr>
+        <td>Nom</td>
+      </tr>
+      {% for i in range(0, liste.length) %}
+          <tr><td>{{liste[i].name}}</td></tr>
+
+      {% endfor %}
+    </table>
+    </body>
+</html>

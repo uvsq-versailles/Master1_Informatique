@@ -1,0 +1,4 @@
+utiliser https
+utiliser post
+utiliser des nonces (csrf)
+faire un rappel pour verifier quon a bien fait cette action (ex retaper le mot de passe) 

@@ -15,6 +15,10 @@ Contenus des COURS/TD/PROJET/EXAM en Master 1
 + INF201 (Programmation, GL et Preuve) : Stephane Lopes
 + INF202 (TER) : Stephane Lopes
 + INF203 (Anglais) 
++ INF211 (Ranking) : Jean-Michel Fourneau
++ INF212 (Simulation) : Franck Quessette
++ INF213 (Tuning de Bases de Données) : Laurent Yeh
++ INF214 (Conception de Bases de Données) : Zoubida Kedad
 + INF215 (Protocoles IP) : Abdelhak Gueroui
 + INF216 (Reseaux Etendus) : Sondes Khemiri-Kallel
 + INF217 (Applications Web et Securite) : Luca de Feo

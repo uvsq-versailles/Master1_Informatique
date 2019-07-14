@@ -1,0 +1,30 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TP4</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <p>Hello {{ name }}!</p>
+
+<ul>
+    {% for x in list %}
+      <li>{{ x }}</li>
+    {% endfor %}
+</ul> 
+
+<form method="POST" action="/bye">
+  
+  <input type="submit" value="BYE">
+  <input id="namebye" name="namebye" type="hidden" value= "{{ name }}">
+
+
+</form>
+  </body>
+</html>
+
+ 
+
+

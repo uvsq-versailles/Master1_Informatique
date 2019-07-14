@@ -1,0 +1,151 @@
+\documentclass{beamer}
+  \usepackage[utf8]{inputenc}
+  \usetheme{Warsaw}
+  \graphicspath{images/}
+  \usepackage{amsmath} 
+  \usepackage{amssymb}
+
+  \title{AWS : Jeu de Dames en ligne}
+  \author{Clément CAUMES \& Mehdi MTALSI-MERIMI}
+  \institute{UFR des Sciences Versailles - M1 Informatique}
+  %\date{
+  %	\begin{itemize}
+  %		\setbeamertemplate{itemize item}[default]
+  %		\item Réalisation d'une carte de référence
+  %		\item Proposition d'un ensemble d'exercices d'apprentissage
+  %		\item Réalisation d'une application exemple 
+  %	\end{itemize}
+  %}
+
+  \begin{document}
+  	
+  \begin{frame}
+  	\titlepage
+  \end{frame}
+
+\section{Structure du code}
+
+\begin{frame}
+\begin{block}{Fichiers de l'application} 
+	\begin{itemize}
+		\setbeamertemplate{itemize item}[circle]
+		\item server.js qui gère l'application côté serveur
+		\item public/client.js qui gère presque toute la partie cliente de l'application
+		\item public/connexion.js qui stockera les informations entrées par l'utilisateur lors de la connexion avec un 
+		mécanisme de session (sessionStorage)
+		\item public/deconnexion.js qui videra la session de l'utilisateur à sa déconnexion
+		\item views/*.html qui sont tous les fichiers HTML de l'application
+		\item public/*.css qui représentent toutes les feuilles de style du site web
+	\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Technologies utilisées}
+
+\begin{frame}
+\begin{block}{Outils de l'application} 
+	\begin{itemize}
+		\setbeamertemplate{itemize item}[circle]
+		\item \textcolor{red}{express} pour définir les différentes routes de l'application (/connexion, /play, /logout, /signin, /login)
+		\item \textcolor{red}{nunjucks} pour générer dynamiquement les pages HTML
+		\item \textcolor{red}{express-session} pour la persistance des données
+		\item \textcolor{red}{websockets} pour obtenir une communication entre clients-serveur (envoyer la liste des joueurs ou assurer le jeu entre deux utilisateurs)
+	\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Cahier des charges}
+
+\subsection{Points obligatoires/optionnels réalisés}
+
+\begin{frame}
+\begin{block}{Les points obligatoires réalisés} 
+	\begin{itemize}
+		\setbeamertemplate{itemize item}[circle]
+		\item Une page permettant de s'enregistrer
+		\item Une page présentant la liste des utilisateurs en ligne, leur nombre de parties gagnées/perdues
+		\item Un mécanisme pour se connecter
+		\item Un mécanisme permettant de défier un adversaire
+		\item Une interface permettant de jouer le jeu
+	\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Les points optionnels réalisés} 
+\begin{itemize}
+	\setbeamertemplate{itemize item}[circle]
+	\item montrer les pions déplaçables et leurs déplacements possibles
+	\item intégrer une base de données pour le stokage des informations de l'état du jeu par le serveur (conséquence : plusieurs parties de joueurs différents peuvent se jouer en même temps)
+	\item mettre plusieurs états des joueurs (CONNECTE, DECONNECTE, OCCUPE)
+	\item permettre à un joueur de quitter par forfait (abandon)
+	\item gérer la déconnexion inhabituelle d'un joueur en pleine partie
+	\item stocker le hash des mots de passe afin de ne pas les stocker en clair (avec bcrypt)
+\end{itemize}
+\end{block}
+\end{frame}
+
+\subsection{Points d'amélioration}
+
+\begin{frame}
+\begin{block}{Les points à ajouter} 
+\begin{itemize}
+\setbeamertemplate{itemize item}[circle]
+\item implémenter plusieurs systèmes de règles différents
+\item utiliser une base de données No-SQL
+\item mettre un tchat sur la page de jeu à côté du plateau pour discuter avec son adversaire pendant la partie (non demandé)
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Protocole utilisé par l'application}
+%Communication bidirectionnelle avec websockets
+\begin{frame}
+\begin{exampleblock}{Inscription et Connexion} 
+	\begin{itemize}
+		\setbeamertemplate{itemize item}[circle]
+		\item Lorsqu'un utilisateur crée un compte, le serveur vérifie que le login choisi n'est pas déjà utilisé par un autre joueur, puis le crée.
+		\item Lorsqu'un utilisateur se connecte, il entre son login et son mot de passe dans le formulaire dont le serveur vérifie son identité.
+		\item Après la vérification de son identité, le serveur le redirige vers la page /play. Il y a ensuite un établissement d'une websocket entre le client et le serveur. Ainsi, le serveur va associer le login du client avec le websocket du client. A chaque mise à jour de l'état des websockets entre le serveur et les clients, le serveur va envoyer la liste de l'état des joueurs (connecté, déconnecté, occupé). Le client va afficher cette liste avec les boutons de défi si le joueur est disponible (non occupé et connecté).
+	\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Initialisation du plateau} 
+	\begin{itemize}
+		\setbeamertemplate{itemize item}[circle]
+		\item Si un joueur défie un autre, celui-ci va envoyer un message d'invitation au serveur. Le serveur vérifie que les deux utilisateurs sont disponibles, crée le plateau associé à leur partie, les met en état d'occupé et envoie aux deux joueurs un message de \textbf{défi} avec de préciser les informations importantes (à qui est le tour, l'hôte, l'adversaire ...).
+		\item Lorsqu'un joueur reçoit un message défi de la part du serveur, le client va créer un plateau complet et l'afficher. Ensuite, le client enverra un message \textbf{invitationRecue} au serveur.
+		\item Le jeu commence et le plateau envoie aux deux joueurs un message \textbf{play} avec le nom de l'hôte, l'adversaire et le nom du joueur qui doit jouer.
+	\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Jeu entre deux utilisateurs} 
+	\begin{itemize}
+		\setbeamertemplate{itemize item}[circle]
+		\item Le client qui doit jouer met à jour son plateau et déplace son pion. Ensuite, le client envoie un message \textbf{playDone} avec le déplacement effectué.
+		\item Le serveur reçoit le message et met à jour en conséquence son plateau. Puis, le serveur envoie le déplacement effectué sous la forme d'un message \textbf{play} au joueur qui doit maintenant joué. et qui attendait au tour précédent. Et ainsi de suite, en répétant l'étape précédente et celle-ci.
+		\item A chaque fois que le serveur reçoit un nouveau déplacement, il vérifie sa validité et vérifie s'il y a un gagnant. Si le déplacement est invalide, s'il y a un abandon, si un joueur se déconnecte, le serveur enverra un message \textbf{error}. Si la partie est terminé, il enverra un message \textbf{défiFini}.
+	\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\section{Sécurité}
+
+\begin{frame}
+
+\begin{alertblock}{Défenses utilisées pour cette application} 
+	\begin{itemize}
+		\setbeamertemplate{itemize item}[circle]
+		\item protection contre les injections SQL avec des requêtes préparées
+		\item protection contre les attaques XSS
+		\item protection côté serveur du client qui essayerait de modifier manuellement ses sessionStorage
+		\item mécanisme qui permet d'empêcher de se connecter deux fois au même compte
+	\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\end{document}
