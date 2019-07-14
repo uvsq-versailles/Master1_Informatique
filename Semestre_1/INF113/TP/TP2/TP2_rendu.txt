@@ -1,0 +1,166 @@
+1)
+DELETE ACTEUR.* FROM ACTEUR WHERE ACTEUR.nom NOT IN (SELECT JOUEDANS.nomActeur FROM JOUEDANS);
+
+2)
+UPDATE REALISATEUR SET salaire=salaire+(salaire*0.1) WHERE salaire<250000;
+
+3)
+R1)
+SELECT ACTEUR.*
+FROM ACTEUR
+WHERE ACTEUR.genre="F"
+ORDER BY ACTEUR.dateNaissance DESC;
+
+R2)
+SELECT ACTEUR.*
+FROM ACTEUR
+WHERE (ACTEUR.dateNaissance<"1950-01-01")
+OR
+(ACTEUR.nom LIKE "_a%");
+
+R3)
+SELECT FILM.titre, FILM.annee
+FROM FILM,  REALISATEUR
+WHERE FILM.certrea=REALISATEUR.numcert
+AND REALISATEUR.nom="CHAPLIN";
+
+R4)
+
+SELECT ACTEUR.nom
+FROM ACTEUR, JOUEDANS, FILM, REALISATEUR
+WHERE ACTEUR.nom=JOUEDANS.nomActeur
+AND JOUEDANS.titreFilm=FILM.titre
+AND FILM.certrea=REALISATEUR.numcert
+AND REALISATEUR.nom LIKE "Lynch"
+AND ACTEUR.Nom
+IN
+(
+SELECT ACTEUR.nom
+FROM ACTEUR, JOUEDANS, FILM, REALISATEUR
+WHERE ACTEUR.nom=JOUEDANS.nomActeur
+AND JOUEDANS.titreFilm=FILM.titre
+AND FILM.certrea=REALISATEUR.numcert
+AND REALISATEUR.nom LIKE "Spielberg"
+);
+
+R5)
+SELECT REALISATEUR.nom
+FROM REALISATEUR, ACTEUR
+WHERE REALISATEUR.nom=ACTEUR.nom;
+
+R6)
+Calcul du minimum :
+SELECT MIN(FILM.cout)
+FROM FILM;
+
+Requete : 
+SELECT REALISATEUR.*
+FROM REALISATEUR
+WHERE REALISATEUR.salaire>(SELECT MIN(FILM.cout)FROM FILM);
+
+R7)
+SELECT DISTINCT A.*
+FROM ACTEUR A, REALISATEUR R, JOUEDANS J, FILM F
+WHERE A.nom=J.nomActeur 
+AND J.titreFilm=F.titre
+AND F.certrea=R.numcert
+AND R.salaire>(SELECT MIN(FILM.cout)FROM FILM);
+
+R8)
+SELECT DISTINCT R.*
+FROM REALISATEUR R, FILM F
+WHERE R.numcert=F.certrea
+AND F.cout>10000000
+AND R.nom NOT IN 
+(SELECT DISTINCT R.nom
+FROM REALISATEUR R, FILM F
+WHERE R.numcert=F.certrea
+AND F.cout<=10000000);
+
+R9)
+SELECT DISTINCT R.*
+FROM REALISATEUR R, FILM F
+WHERE R.numcert=F.certrea
+AND F.cout<=1000000
+AND R.nom NOT IN 
+(SELECT R.nom
+FROM REALISATEUR R, FILM F
+WHERE R.numcert=F.certrea
+AND F.cout>1000000);
+
+R10)
+SELECT R.*, AVG(F.cout) AS COUT_MOYEN, MAX(F.cout) AS COUT_MAX
+FROM REALISATEUR R, FILM F
+WHERE R.numcert=F.certrea
+GROUP BY R.nom;
+
+R11)
+SELECT R.*, AVG(F.cout) AS COUT_MOYEN, MAX(F.cout) AS COUT_MAX
+FROM REALISATEUR R, FILM F
+WHERE R.numcert=F.certrea
+AND R.nom NOT IN 
+(SELECT R.nom
+FROM REALISATEUR R, FILM F
+WHERE R.numcert=F.certrea
+AND F.cout<=1000000)
+GROUP BY R.nom;
+
+R12)
+Le cout max de chalin est : 
+SELECT MAX(FILM.duree)
+FROM FILM, REALISATEUR
+WHERE FILM.certrea=REALISATEUR.numcert
+AND REALISATEUR.nom="Chaplin";
+
+Donc la requete est :
+SELECT F.*
+FROM FILM F
+WHERE F.duree>(SELECT MAX(FILM.duree)
+FROM FILM, REALISATEUR
+WHERE FILM.certrea=REALISATEUR.numcert
+AND REALISATEUR.nom="Chaplin");
+
+R13)
+SELECT F.titre, F.annee, A.nom, A.adresse
+FROM FILM F, ACTEUR A, JOUEDANS J
+WHERE J.nomActeur=A.nom
+AND J.titreFilm=F.titre
+AND F.duree>125
+ORDER BY F.titre, F.annee ASC, A.adresse DESC;
+
+R14)
+Compte le nombre dacteurs par films
+SELECT F.*, COUNT(A.nom)
+FROM FILM F, ACTEUR A, JOUEDANS J
+WHERE F.titre=J.titreFilm
+AND J.nomActeur=A.nom
+GROUP BY F.titre, F.annee;
+
+Selectionne les films avec plus de 2 acteurs
+SELECT F.*, COUNT(A.nom)
+FROM FILM F, ACTEUR A, JOUEDANS J
+WHERE F.titre=J.titreFilm
+AND J.nomActeur=A.nom
+GROUP BY F.titre, F.annee
+HAVING COUNT(A.nom)>2; //EXPLICATION DU PROF AVEC DIAPO
+
+Donc la requete est : 
+
+SELECT F.*, A.nom AS nom_acteurs
+FROM FILM F, ACTEUR A, JOUEDANS J
+WHERE F.titre=J.titreFilm
+AND F.annee=J.anneeFilm
+AND J.nomActeur=A.nom
+AND (F.titre, F.annee) IN
+(
+SELECT F.titre, F.annee
+FROM FILM F, ACTEUR A, JOUEDANS J
+WHERE F.titre=J.titreFilm
+AND F.cout>1000000
+AND J.nomActeur=A.nom
+GROUP BY F.titre, F.annee
+HAVING COUNT(A.nom)>2
+);
+
+R15)
+SELECT F.titre, F.cout, F.cout*0.67 AS EURO FROM FILM F;

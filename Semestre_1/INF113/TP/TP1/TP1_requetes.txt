@@ -1,0 +1,108 @@
+1) a) CREATE TABLE Personnel (
+		-> PersonnelId integer, 
+		-> Nom varchar(20), 
+		-> Naissance date, 
+		-> HeuresDeVol int, 
+		-> Type varchar(4));
+
+ CREATE TABLE Destination (
+    -> DestinationId int,
+    -> Ville varchar (20),
+    -> Pays varchar (20),
+    -> Distance int);
+
+CREATE TABLE Compagnie (
+    -> CompagnieId int, 
+    -> Nom varchar(20));
+    
+CREATE TABLE Equipage (
+    -> VolId int,
+    -> PersonnelId int);
+    
+CREATE TABLE Avion ( AvionId int, CompagnieId int, Nom varchar(20), Vitesse int, Equipage int);
+
+CREATE TABLE Vol (VolId int, AvionId int, DestinationId int, Depart date);
+
+CREATE TABLE Reservation (ReservationId int, VolId int, Nom varchar(20), Prix int, Reduction int);
+
+b) show tables
+
+2)a) ALTER TABLE Avion MODIFY COLUMN Vitesse double(6,2);
+ALTER TABLE Personnel MODIFY COLUMN Nom char(10);
+ALTER TABLE Compagnie MODIFY COLUMN Nom char(10);
+ALTER TABLE Avion MODIFY COLUMN Nom char(10);
+ALTER TABLE Reservation MODIFY COLUMN Nom char(10); 
+
+b)
+ALTER TABLE Avion ADD COLUMN Capacite int;
+
+ALTER TABLE Destination ADD COLUMN Decalage int;
+
+c)
+
+3)a)
+ALTER TABLE Personnel ADD CONSTRAINT cle_prim_Personnel PRIMARY KEY (PersonnelId);
+ALTER TABLE Destination ADD CONSTRAINT cle_prim_Destination PRIMARY KEY (DestinationId);
+ALTER TABLE Compagnie ADD CONSTRAINT cle_prim_Compagnie PRIMARY KEY (CompagnieId);
+ALTER TABLE Avion ADD CONSTRAINT cle_prim_Avion PRIMARY KEY (AvionId);
+ALTER TABLE Vol ADD CONSTRAINT cle_prim_Vol PRIMARY KEY (VolId);
+ALTER TABLE Reservation ADD CONSTRAINT cle_prim_Reservation PRIMARY KEY (ReservationId);
+ALTER TABLE Equipage ADD CONSTRAINT cle_prim_Equipage PRIMARY KEY (VolId, PersonnelId);
+
+ALTER TABLE Avion ADD FOREIGN KEY (CompagnieId) REFERENCES Compagnie(CompagnieId);
+ALTER TABLE Vol ADD FOREIGN KEY (AvionId) REFERENCES Avion(AvionId);
+ALTER TABLE Vol ADD FOREIGN KEY (DestinationId) REFERENCES Destination(DestinationId);
+ALTER TABLE Reservation ADD FOREIGN KEY (VolId) REFERENCES Vol(VolId);
+ALTER TABLE Equipage ADD FOREIGN KEY (VolId) REFERENCES Vol(VolId);
+ALTER TABLE Equipage ADD FOREIGN KEY (PersonnelId) REFERENCES Personnel(PersonnelId);
+
+4)
+INSERT INTO Personnel VALUES (1, "Caumes", "1997-03-02", 120, "pilo");
+INSERT INTO Personnel VALUES (2, "Merimi", "1996-11-15", 120, "cont"); 
+INSERT INTO Destination VALUES (1, "New York", "USA", 1200, 6);
+INSERT INTO Destination VALUES (2, "Los Angeles", "USA", 2000, 9);
+INSERT INTO Compagnie VALUES (1, "Air France");
+INSERT INTO Compagnie VALUES (2, "Virgin");
+INSERT INTO Avion VALUES (1, 1, "Air France Avion 1", 300, 10, 10);
+INSERT INTO Avion VALUES (2, 2, "Virgin Avion 1", 400, 20, 10);
+INSERT INTO Vol VALUES (1, 1, 1, "2018-11-16");
+INSERT INTO Vol VALUES (2, 2, 2, 2018-11-17");
+INSERT INTO Reservation VALUES (1, 1, "Gonthier", 100, 15);
+INSERT INTO Reservation VALUES (2, 1, "Guillot", 80, 10);
+INSERT INTO Equipage VALUES (1, 1);
+INSERT INTO Equipage VALUES (1, 2);
+INSERT INTO Equipage VALUES (2, 1);
+
+5) 
+UPDATE Avion SET Nom=UPPER(Nom);
+UPDATE Destination SET Ville=LOWER(Ville) WHERE Distance>1000;
+UPDATE Destination SET Decalage=Decalage+1 WHERE Pays="USA";
+
+6)
+DELETE FROM Avion WHERE Equipage=5;
+DELETE FROM Vol WHERE Depart<"2005-01-01";
+
+PARTIE 2:
+1)
+SELECT Avion.Vitesse FROM Avion WHERE Avion.Nom="A320";
+2)
+SELECT * FROM Personnel WHERE Personnel.Type="Pilote";
+3)
+SELECT DISTINCT Destination.Pays FROM Destination; 
+4)
+SELECT Personnel.Naissance FROM Personnel WHERE Personnel.Nom="Caumes";
+5)
+SELECT Destination.Ville 
+FROM Destination, Vol, Equipage, Personnel 
+WHERE Personnel.PersonnelId=Equipage.PersonnelId
+AND Vol.VolId=Equipage.VolId
+AND Destination.DestinationId=Vol.DestinationId
+AND Personnel.Nom="Caumes"
+ORDER BY Destination.Ville ASC;
+6)
+SELECT Avion.*
+FROM Avion, Vol, Destination
+WHERE Avion.AvionId=Vol.AvionId
+AND Vol.DestinationId=Destination.DestinationId
+AND Destination.Ville="los angeles"
+ORDER BY Avion.Vitesse DESC;
